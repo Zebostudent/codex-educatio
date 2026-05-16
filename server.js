@@ -10,7 +10,11 @@ const initSqlJs = require('sql.js');
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+const PUBLIC_DIR = fs.existsSync(path.join(__dirname, 'public'))
+  ? path.join(__dirname, 'public')
+  : __dirname;
+
+app.use(express.static(PUBLIC_DIR));
 
 // ── SOZLAMALAR ──────────────────────────────────────────────
 let CFG = {
@@ -262,7 +266,7 @@ app.post('/api/admin/hammaga-sms', adminAuth, async (req, res) => {
 });
 
 // SPA fallback
-app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+app.get('*', (_, res) => res.sendFile(path.join(PUBLIC_DIR, 'index.html')));
 
 // ── STANDART MA'LUMOTLAR ─────────────────────────────────────
 const SINFLAR_STANDART = ['1-sinf','2-sinf','3-sinf','4-sinf','5-sinf','6-sinf','7-sinf','8-sinf','9-sinf','10-sinf','11-sinf'];
